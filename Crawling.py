@@ -1,6 +1,6 @@
-from NaverImageCrawling import NaverImageCrawling
+from NaverImageCrawling import NaverImageCrawling_vernew
 
-images =NaverImageCrawling.NaverImageCrawling()
+images =NaverImageCrawling_vernew.NaverImageCrawling()
 
 #변경점
-images.downloadImage('keyword',100)
+images.downloadImage('슬기',100)

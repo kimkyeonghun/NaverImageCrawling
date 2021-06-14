@@ -38,7 +38,7 @@ class NaverImageCrawling():
 
         #selenium Option 설정
         options =webdriver.ChromeOptions()
-        options.add_argument('headless')
+        #options.add_argument('headless')
         options.add_argument('window-size=1920x1080')
         options.add_argument('disable-gpu')
         driver = webdriver.Chrome(self.driverPath,chrome_options=options)
@@ -51,13 +51,16 @@ class NaverImageCrawling():
         quote = rep.quote_plus(keyword)
         url = base+quote
         driver.get(url)
-        sample = driver.find_element_by_css_selector('#_sau_imageTab > div.photowall._photoGridWrapper > div.more_img > a')
-
+        
+        #sample = driver.find_element_by_css_selector('#_sau_imageTab > div.photowall._photoGridWrapper > div.more_img > a')
+        sample = driver.find_element_by_css_selector('#main_pack > section > div > div.photo_group._listGrid > div.photo_tile._grid > div:nth-child(1) > div > div.thumb > a')
+        print(sample)
         #페이지 스크롤 늘리기
         """네이버 이미지 검색을 하면 50개만 이미지가 노출이 되고 아래로 스크롤을 내려야 추가적으로 50개씩 이미지가 추가 노출된다."""
         page,remain=divmod(cnt,50)
         for i in range(page):
-            driver.execute_script('arguments[0].click();',sample)
+            #driver.execute_script('arguments[0].click();',sample)
+            driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             driver.implicitly_wait(5)
             time.sleep(1)
             print("Page Extend!")
@@ -70,6 +73,8 @@ class NaverImageCrawling():
             for j in range(1,51):
                 count+=1
                 try:
+                    //*[@id="main_pack"]/section/div/div[1]/div[1]/div[1]/div/div[1]/a/img
+                    //*[@id="main_pack"]/section/div/div[1]/div[1]/div[1]/div/div[1]/a/img
                     img=driver.find_element_by_xpath('//*[@id="_sau_imageTab"]/div[1]/div['+str(i)+']/div['+str(j)+']/a[1]/img')
                     driver.implicitly_wait(2)
                     time.sleep(1)
