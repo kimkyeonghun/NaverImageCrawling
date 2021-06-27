@@ -1,4 +1,7 @@
 import os
+import re
+import base64
+from tqdm import tqdm
 
 class NaverImageCrawling():
     def __init__(self):
@@ -18,6 +21,18 @@ class NaverImageCrawling():
             if e.errno != errno.EEXIST:
                 print("Fail to make Folder!")
                 raise
+    
+    def base64decoding(self,link,fullFileName):
+        result = re.search("data:image/(?P<ext>.*?);base64,(?P<data>.*)", link, re.DOTALL)
+        if result:
+            ext = result.groupdict().get("ext")
+            data = result.groupdict().get("data")
+        else:
+            raise Exception("Do not parse!")
+        img = base64.urlsafe_b64decode(data)
+        fileName = "{}.{}".format(fullFileName,ext)
+        with open(fileName,"wb") as f:
+            f.write(img)
 
     def downloadImage(self,keyword,cnt,path=None):
         """keyword : 검색어
@@ -51,47 +66,32 @@ class NaverImageCrawling():
         quote = rep.quote_plus(keyword)
         url = base+quote
         driver.get(url)
-        
-        #sample = driver.find_element_by_css_selector('#_sau_imageTab > div.photowall._photoGridWrapper > div.more_img > a')
-        sample = driver.find_element_by_css_selector('#main_pack > section > div > div.photo_group._listGrid > div.photo_tile._grid > div:nth-child(1) > div > div.thumb > a')
-        # print(sample)
-        #페이지 스크롤 늘리기
-        # """네이버 이미지 검색을 하면 50개만 이미지가 노출이 되고 아래로 스크롤을 내려야 추가적으로 50개씩 이미지가 추가 노출된다."""
-        # page,remain=divmod(cnt,50)
-        # for i in range(page):
-        #     #driver.execute_script('arguments[0].click();',sample)
-        #     driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-        #     driver.implicitly_wait(5)
-        #     time.sleep(1)
-        #     print("Page Extend!")
-        # print("Page Extend Completed!")
 
         print()
         print("Download Start")
         count=0
-        while cnt >= 0:
+        for c in tqdm(range(cnt),desc="Iterable"):
             count += 1
             try:
                 img=driver.find_element_by_xpath('//*[@id="main_pack"]/section/div/div[1]/div[1]/div[{}]/div/div[1]/a/img'.format(count))
                 driver.implicitly_wait(2)
                 time.sleep(1)
             except:
-                driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-                driver.implicitly_wait(5)
-                time.sleep(1)
-                count -= 1
                 continue
             
             link = img.get_attribute('src')
-            print(link)
-            fullFileName = os.path.join(self.savePath,keyword+str(count)+'.png')
-            req.urlretrieve(link,fullFileName)
+            fullFileName = os.path.join(self.savePath,keyword+str(count))
+            if link[0:4]=='data':
+                continue
+            else:
+                req.urlretrieve(link,fullFileName+'.png')
+                c-=1
             driver.implicitly_wait(2)
             time.sleep(1)
-            print("=====================================")
-            print("{}% Completed!".format(round(count/cnt,6)*100))
-            print("=====================================")
-            cnt-=1
+            if c % 10 == 0:        
+                driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+                driver.implicitly_wait(5)
+                time.sleep(1)
 
         print("Download Finish!")
         driver.quit()
