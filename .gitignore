@@ -5,3 +5,5 @@
 .vscode
 
 /imageDownload
+
+NaverImageCrawling/__pycache__

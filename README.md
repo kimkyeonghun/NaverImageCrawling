@@ -19,17 +19,16 @@ Selenium을 사용한 네이버 이미지 크롤러입니다. 네이버 이미�
 
 1. **Crawling.py**
    - Crawling.py를 수정해서 네이버 이미지를 크롤링 합니다.
+   - argparse를 사용해서 keyword, 갯수, path를 입력받습니다.
+     - python Crawling --keyword _ --n _ --path _
+     - keyword와 n은 필수이며 path는 지정하지 않는 경우 default로 설정된 값으로 생성합니다.
    
-    images.downloadImage('keyword',100)
-   
-   - 위 코드에 keyword에 내가 검색하고 싶은 단어, cnt의 크롤링하고 싶은 이미지의 갯수를 넣어주면 됩니다.
+   - 위 코드에 keyword에 내가 검색하고 싶은 단어, n에 크롤링하고 싶은 이미지의 갯수를 넣어주면 됩니다.
 
 ## 결과
 
-![1569845876326](C:\Users\kkh11\AppData\Roaming\Typora\typora-user-images\1569845876326.png)
-
 다음과 같이 크롤링의 결과가 나타나며 이미지가 크롤링 됩니다.
 
-
+![image-20210717165727284](.\img\example.png)
 
 공부 목적으로 만들고 있기 때문에 버그가 있을 수도 있으며 추가 기능이 생길 수 있습니다.
