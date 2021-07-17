@@ -29,6 +29,6 @@ Selenium을 사용한 네이버 이미지 크롤러입니다. 네이버 이미�
 
 다음과 같이 크롤링의 결과가 나타나며 이미지가 크롤링 됩니다.
 
-![image-20210717165727284](.\img\example.png)
+![example](https://user-images.githubusercontent.com/41284582/126030574-ac59aa96-71ba-4d3e-b0f5-ea7a9e65bda8.png)
 
 공부 목적으로 만들고 있기 때문에 버그가 있을 수도 있으며 추가 기능이 생길 수 있습니다.
