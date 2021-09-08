@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import chromedriver_autoinstaller
 
 import urllib.parse as rep
 import urllib.request as req
@@ -47,8 +48,13 @@ class NaverImageCrawling():
         options.add_argument('headless')
         options.add_argument('window-size=1920x1080')
         options.add_argument('disable-gpu')
-        driver = webdriver.Chrome(self.driver_path, chrome_options = options)
-        driver.implicitly_wait(2)
+        try:
+
+            driver = webdriver.Chrome(self.driver_path, chrome_options = options)
+            driver.implicitly_wait(2)
+        except:
+            path = chromedriver_autoinstaller.install()
+            driver = webdriver.Chorome(path, chrome_options = options)
         return driver
 
     def download_image(self, keyword: str, cnt: int, path: str):
